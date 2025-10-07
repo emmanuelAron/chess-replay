@@ -1,0 +1,4 @@
+com\github\emmanuelAron\ChessReplayApplication.class
+com\github\emmanuelAron\websocket\WebSocketConfig.class
+com\github\emmanuelAron\kafka\PgnConsumerWebSocket.class
+com\github\emmanuelAron\websocket\ChessWebSocketHandler.class
