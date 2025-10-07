@@ -16,14 +16,14 @@ Enfin j'aimerai envoyer ces données sur plusieurs partitions spark , et réflé
 
 Vous trouverez ci dessous un lien vidéo présentant une petite démo en anglais (faite en vitesse), sur ce début du projet.  
 
-Technos:
-Java 17
-Spring boot avec socket
-Kafka
-Maven,Docker
-Python, Spark
-React (pas encore implémenté)
+Technos:  
 
+Java 17  
+Spring boot avec socket  
+Kafka   
+Maven,Docker   
+Python, Spark   
+React (pas encore implémenté)   
 
 
 https://drive.google.com/file/d/1IDeHXMiDUqB8Z41WPCO_oQpaZH_oeZn2/view?usp=sharing
