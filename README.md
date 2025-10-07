@@ -12,7 +12,7 @@ Ensuite je souhaiterai utiliser react-chessboard pour faire apparaitre un échiq
 Ensuite, j'aimerai plusieurs echiquiers qui défilent à cette vitesse...Chaque échiquier serait un Consumer kafka d'une même source (pouvant etre tres grande) de données.    
 Ensuite j'aimerai qu'à coté de chaque échiquier s'affiche des statistiques générées avec spark (pandas?) , par exemple le taux de victoire de chaque joueur de la partie en cours, ses ouvertures les plus jouées...A voir...    
 Spark sera préféré à pandas car ce sera un contexte big data.  
-Enfin j'aimerai envoyer ces données sur plusieurs partitions spark , et réfléchir aux problématiques de performance et de traitement de données massives.  
+Enfin j'aimerai envoyer ces données sur plusieurs partitions spark (traitement distribué) , et réfléchir aux problématiques de performance et de traitement de données massives.  
 
 Vous trouverez ci dessous un lien vidéo présentant une petite démo en anglais (faite en vitesse), sur ce début du projet.  
 
