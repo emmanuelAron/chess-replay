@@ -32,12 +32,12 @@ Depuis le répertoire /chess-replay-parent :
 Lancer Docker
  
 ```bash  
-   docker-compose up -d  
+docker-compose up -d  
 ```
 Lancer spring-boot:
 ```code   
 cd chess-replay-v1
-   mvn spring-boot:run
+mvn spring-boot:run
 ```
 
 
