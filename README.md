@@ -30,11 +30,12 @@ https://drive.google.com/file/d/1IDeHXMiDUqB8Z41WPCO_oQpaZH_oeZn2/view?usp=shari
 
 Depuis le répertoire /chess-replay-parent :  
 Lancer Docker
-bash ```
+ 
+```bash  
    docker-compose up -d  
 ```
 Lancer spring-boot:
-code ```
+```code   
 cd chess-replay-v1
    mvn spring-boot:run
 ```
