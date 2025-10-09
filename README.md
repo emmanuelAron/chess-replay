@@ -23,7 +23,9 @@ Spring boot avec socket
 Kafka   
 Maven,Docker   
 Python, Spark   
+
 React (pas encore implémenté)
+
 
 Vidéo de démo:  
 https://drive.google.com/file/d/1IDeHXMiDUqB8Z41WPCO_oQpaZH_oeZn2/view?usp=sharing
