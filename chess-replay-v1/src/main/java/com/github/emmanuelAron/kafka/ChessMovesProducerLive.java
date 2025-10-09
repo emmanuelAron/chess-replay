@@ -16,7 +16,7 @@ public class ChessMovesProducerLive {
 
     public static void main(String[] args) throws InterruptedException {
 
-        String topicName = "chess-moves-0";
+        String topicName = "chess-moves";
         String filePath = "C:\\Users\\emman\\Desktop\\ironhackData\\week7\\chess_dataset\\games_1990_cleaned_final_cleaned.jsonl";
 
         // Kafka properties

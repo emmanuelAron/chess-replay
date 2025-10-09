@@ -25,6 +25,7 @@ public class ChessWebSocketHandler extends TextWebSocketHandler {
     }
 
     public void broadcast(String message) {
+        System.out.println("📡 Broadcasting to WebSocket: " + message);
         for (WebSocketSession session : sessions) {
             try {
                 session.sendMessage(new TextMessage(message));
