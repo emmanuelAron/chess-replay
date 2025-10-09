@@ -40,4 +40,8 @@ cd chess-replay-v1
 mvn spring-boot:run
 ```
 
+moves_replay.png
+![moves_replay.png](img/moves_replay.png) 
+![debug des coups reçus frontend](img/debug des coups reçus.png) 
+
 
