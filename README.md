@@ -25,5 +25,18 @@ Maven,Docker
 Python, Spark   
 React (pas encore implémenté)   
 
-
+Vidéo de démo:  
 https://drive.google.com/file/d/1IDeHXMiDUqB8Z41WPCO_oQpaZH_oeZn2/view?usp=sharing
+
+Depuis le répertoire /chess-replay-parent :  
+Lancer Docker
+bash ```
+   docker-compose up -d  
+```
+Lancer spring-boot:
+code ```
+cd chess-replay-v1
+   mvn spring-boot:run
+```
+
+
