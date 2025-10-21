@@ -8,10 +8,11 @@ Partant d'un fichier pgn (format propre aux échecs), il y a du retraitement de 
 J'ai fait le choix technique de transformer ces données en jsonl car le pgn pur m'a confronté à trop de problemes dans le nettoyage, validation des données...  
 Premier test sur un fichier de 66 000 parties, je transforme ce pgn en jsonl (utilisé dans le monde big data).
 Ce jsonl est transmis à kafka via un producer et un consumer et on voit les coups défiler coté backend sur la console toutes les X secondes...(fait)  
-Ensuite je souhaiterai utiliser react-chessboard pour faire apparaitre un échiquier visuel sous forme web qui fera défiler les parties à une vitesse V (chaque coups).   
-Ensuite, j'aimerai plusieurs echiquiers qui défilent à cette vitesse...Chaque échiquier serait un Consumer kafka d'une même source (pouvant etre tres grande) de données.    
+Ensuite je souhaiterai utiliser react-chessboard pour faire apparaitre un échiquier visuel sous forme web qui fera défiler les parties à une vitesse V (chaque coups).
+
 Ensuite j'aimerai qu'à coté de chaque échiquier s'affiche des statistiques générées avec spark (pandas?) , par exemple le taux de victoire de chaque joueur de la partie en cours, ses ouvertures les plus jouées...A voir...    
 Spark sera préféré à pandas car ce sera un contexte big data.  
+Ensuite, j'aimerai plusieurs echiquiers qui défilent à cette vitesse...Chaque échiquier serait un Consumer kafka d'une même source (pouvant etre tres grande) de données.    
 Enfin j'aimerai envoyer ces données sur plusieurs partitions spark (traitement distribué) , et réfléchir aux problématiques de performance et de traitement de données massives.
 
 Vous trouverez ci dessous un lien vidéo présentant une petite démo en anglais (faite en vitesse), sur ce début du projet.
