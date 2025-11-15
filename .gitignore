@@ -1,0 +1,15 @@
+# React frontend
+chess-frontend/node_modules/
+node_modules/
+
+# Logs
+*.log
+
+# Build
+dist/
+build/
+
+# Java / Maven / IntelliJ
+target/
+.idea/
+*.iml

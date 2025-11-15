@@ -2,29 +2,43 @@ import json
 import re
 import sys
 import os
+from tqdm import tqdm
 
 def parse_pgn(pgn_file):
-    """Parse a PGN file and yield one game (metadata + moves) at a time."""
+    """Parse PGN file and yield one complete game starting at '1.'."""
     with open(pgn_file, "r", encoding="utf-8", errors="ignore") as f:
         buffer = []
         for line in f:
-            if line.strip() == "" and buffer:
-                yield "\n".join(buffer)
+            stripped = line.strip()
+
+            # 🟡 Détection d'un nouveau début de partie
+            if re.match(r"^1\.", stripped) and buffer:
+                # si la partie précédente contient au moins un coup, on l'envoie
+                if any(re.match(r"^\d+\.", l) for l in buffer):
+                    yield "\n".join(buffer)
                 buffer = []
-            else:
-                buffer.append(line.strip())
-        if buffer:
+
+            buffer.append(stripped)
+
+        # dernière partie du fichier
+        if any(re.match(r"^\d+\.", l) for l in buffer):
             yield "\n".join(buffer)
 
+
 def extract_game_data(raw_game):
-    """Extract key metadata and moves from a single PGN string."""
+    """Extract metadata and moves from one PGN block."""
     tags = dict(re.findall(r'\[(\w+)\s+"(.*?)"\]', raw_game))
-    moves_text = re.sub(r'\[.*?\]', '', raw_game)  # remove metadata blocks
-    moves_text = re.sub(r'\d+\.', '', moves_text)  # remove move numbers
+
+    # Nettoyage du texte
+    moves_text = re.sub(r'\[.*?\]', '', raw_game)
+    moves_text = re.sub(r'\d+\.', '', moves_text)
     moves_text = re.sub(r'\s+', ' ', moves_text).strip()
 
+    # Couper à la fin de la partie
+    moves_text = re.split(r'\s(1-0|0-1|1/2-1/2)\s?', moves_text)[0]
+
+    # Extraire les coups en SAN
     moves = re.findall(r'\b[a-hRNBQKO0-9x+=#-]+\b', moves_text)
-    moves = [m for m in moves if not m.endswith("1-0") and not m.endswith("0-1") and not m.endswith("1/2-1/2")]
 
     return {
         "event": tags.get("Event", ""),
@@ -37,20 +51,27 @@ def extract_game_data(raw_game):
         "moves": moves
     }
 
+
 def convert_pgn_to_jsonl(pgn_path):
-    """Main function: convert a PGN file into JSONL format."""
+    """Convert PGN file into JSONL (1 game per line)."""
     output_path = pgn_path.replace(".pgn", "_cleaned.jsonl")
 
-    with open(output_path, "w", encoding="utf-8") as out:
-        for raw_game in parse_pgn(pgn_path):
-            data = extract_game_data(raw_game)
-            if data["moves"]:
-                json.dump(data, out, ensure_ascii=False)
-                out.write("\n")
+    total_games = valid_games = 0
 
-    print(f"✅ Conversion terminée !")
-    print(f"📂 Fichier généré : {output_path}")
-    return output_path
+    with open(output_path, "w", encoding="utf-8") as out:
+        for raw_game in tqdm(parse_pgn(pgn_path), desc="♟️ Conversion des parties"):
+            total_games += 1
+            data = extract_game_data(raw_game)
+            if not data["moves"] or len(data["moves"]) < 4:
+                continue
+            json.dump(data, out, ensure_ascii=False)
+            out.write("\n")
+            valid_games += 1
+
+    print(f"\nConversion terminée !")
+    print(f"Parties totales : {total_games}")
+    print(f"Parties valides : {valid_games}")
+    print(f"Fichier généré : {output_path}")
 
 
 if __name__ == "__main__":

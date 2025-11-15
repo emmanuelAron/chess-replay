@@ -1,91 +1,81 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
+import { fromEvent, interval } from "rxjs";
+import { map, concatMap } from "rxjs/operators";
 
 const ChessGame = () => {
-  const [game] = useState(new Chess());
+  const [game, setGame] = useState(new Chess());
   const [position, setPosition] = useState("start");
-  const [lastMoveIndex, setLastMoveIndex] = useState(-1);
+  const [moveCount, setMoveCount] = useState(0);
+  const [turn, setTurn] = useState("White");
   const [players, setPlayers] = useState({ white: "White", black: "Black" });
-  const [boardKey, setBoardKey] = useState(0);
-
+  const currentGameId = useRef(null);
 
   useEffect(() => {
     const socket = new WebSocket("ws://localhost:8080/chess-stream");
 
-    socket.onopen = () => {
-      console.log("✅ WebSocket connected");
-    };
+    const moves$ = fromEvent(socket, "message").pipe(
+      map((event) => JSON.parse(event.data)),
+      // 👇 traite chaque coup avec un délai de 1s
+      concatMap((moveData) => interval(1000).pipe(map(() => moveData)))
+    );
 
-    socket.onclose = () => {
-      console.warn("⚠️ WebSocket fermé");
-    };
+    const subscription = moves$.subscribe((data) => {
+      const { move, moveIndex, gameId, white, black } = data;
 
-    socket.onerror = (err) => {
-      console.error("❌ WebSocket error:", err);
-    };
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const move = data.move;
-      const moveIndex = data.moveIndex;
-
-      console.log("📥 Reçu :", data);
-      console.log("⏳ FEN actuelle :", game.fen());
-
-      // Ne pas rejouer un coup déjà joué
-      if (moveIndex <= lastMoveIndex) {
-        console.log("⏭ Coup ignoré (déjà joué ou en retard) :", move);
+      // 🔄 Nouvelle partie détectée
+      if (moveIndex === 0 || gameId !== currentGameId.current) {
+        console.log("🔄 Nouvelle partie détectée :", gameId);
+        const newGame = new Chess();
+        setGame(newGame);
+        setPosition("start");
+        currentGameId.current = gameId;
+        setPlayers({ white, black });
+        setMoveCount(0);
+        setTurn("White");
         return;
       }
 
-      // Redémarrer une partie si moveIndex === 0
-      if (moveIndex === 0) {
-        console.log("🔄 Nouvelle partie, reset échiquier");
-        game.reset();
-        setPosition("start");
-        setLastMoveIndex(-1);
-      }
-
-      // Afficher les noms des joueurs si présents
-      setPlayers({
-        white: data.white || "White",
-        black: data.black || "Black",
-      });
-
       try {
-        const result = game.move(move);
-        if (result) {
-          setPosition(game.fen());
-          setLastMoveIndex(moveIndex);
-          setBoardKey(prev => prev + 1); // 👈 force re-render
-          console.log("✅ Coup appliqué :", move);
+        const newGame = new Chess(game.fen());
+        const result = newGame.move(move);
 
-          // ✅ Vérifie si le roi est en échec (nouvelle API)
-          if (game.isCheck()) {
-            console.warn("♟️ Le roi est en échec !");
-          }
+        if (result) {
+          setGame(newGame);
+          setPosition(newGame.fen());
+          setMoveCount(moveIndex + 1);
+          setTurn(newGame.turn() === "w" ? "White" : "Black");
+          console.log("✅ Coup appliqué :", move);
         } else {
-          console.warn("⛔ Coup invalide ignoré :", move, "FEN :", game.fen());
+          console.warn("⛔ Coup invalide :", move);
         }
       } catch (err) {
-        console.error("❌ Erreur traitement coup :", move, err);
+        console.error("❌ Erreur coup :", move, err);
       }
-    };
+    });
+
+    socket.onopen = () => console.log("✅ WebSocket connecté (rxjs)");
+    socket.onclose = () => console.warn("⚠️ WebSocket fermé");
+    socket.onerror = (err) => console.error("❌ Erreur WS:", err);
 
     return () => {
+      console.log("🔌 Fermeture du socket proprement");
+      subscription.unsubscribe();
       socket.close();
     };
-  }, [game, lastMoveIndex]);
+  }, []);
 
   return (
-    <div style={{ width: 400 }}>
+    <div style={{ width: 400, textAlign: "center" }}>
       <h2>Partie en direct</h2>
       <h4>{players.white} vs {players.black}</h4>
-      <Chessboard 
-      key={boardKey} // 👈 force mise à jour visuelle
-      position={position} 
-      arePiecesDraggable={false} />
+
+      <Chessboard position={position} arePiecesDraggable={false} />
+
+      <div style={{ marginTop: 10, fontWeight: "bold" }}>
+        ♟️ Coup {moveCount} — Trait aux {turn === "White" ? "Blancs" : "Noirs"}
+      </div>
     </div>
   );
 };

@@ -17,7 +17,10 @@ public class ChessMovesProducerLive {
     public static void main(String[] args) throws InterruptedException {
 
         String topicName = "chess-moves";
-        String filePath = "C:\\Users\\emman\\Desktop\\ironhackData\\week7\\chess_dataset\\games_1990_cleaned_final_cleaned.jsonl";
+        //String filePath = "C:\\Users\\emman\\Desktop\\ironhackData\\week7\\chess_dataset\\games_1990_cleaned_final_cleaned.jsonl";
+        //String filePath = "games_1990_cleaned.jsonl";
+        String filePath = "D:\\eclipse_wkspace\\chess-replay-parent\\pgn-cleaner\\games_1990_cleaned.jsonl";
+
 
         // Kafka properties
         Properties props = new Properties();
@@ -37,6 +40,8 @@ public class ChessMovesProducerLive {
 
                 String white = game.optString("white", "White");
                 String black = game.optString("black", "Black");
+                String rawDate = game.optString("date", "Unknown");
+                String date = rawDate.replace("??", "01"); // Nettoyage date
                 String event = game.optString("event", "Event");
                 String gameId = "game-" + gameCount;
 
@@ -49,10 +54,16 @@ public class ChessMovesProducerLive {
                     moveMsg.put("move", moves.getString(i));
                     moveMsg.put("white", white);
                     moveMsg.put("black", black);
+                    moveMsg.put("date", date);
+                    moveMsg.put("event", event);
+
+                    // petit délai au tout début
+                    if (i == 0) Thread.sleep(2000);
 
                     producer.send(new ProducerRecord<>(topicName, moveMsg.toString()));
                     System.out.println("➡️ Sent move: " + moveMsg.getString("move"));
-                    Thread.sleep(500);  // délai de 0.5 sec entre chaque coup
+                    gameCount++;
+                    Thread.sleep(3000);  // délai de 3 sec entre chaque coup
                 }
 
                 System.out.println("✅ Partie terminée\n");
