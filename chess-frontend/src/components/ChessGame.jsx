@@ -1,45 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 
 const ChessGame = () => {
-  // on crée une seule instance du jeu
   const [game] = useState(() => new Chess());
   const [position, setPosition] = useState(game.fen());
-  const moves = ["e4", "c5", "Nf3"];
+  const [messages, setMessages] = useState([]);
 
-  const playNextMove = () => {
-    const currentMove = moves[game.history().length];
-    if (!currentMove) {
-      console.log("Tous les coups ont été joués !");
-      return;
-    }
+  useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8080/chess");
 
-    const result = game.move(currentMove);
-    if (result) {
-      console.log(`Coup joué : ${currentMove}`);
-      setPosition(game.fen());
-    } else {
-      console.warn(`Coup invalide : ${currentMove}`);
-    }
-  };
+    ws.onopen = () => {
+      console.log("WebSocket connecté");
+      setMessages((prev) => [...prev, "WS connecté"]);
+    };
 
-  const resetGame = () => {
-    game.reset(); // méthode native de chess.js
-    setPosition(game.fen());
-    console.log("Plateau réinitialisé");
-  };
+    ws.onmessage = (event) => {
+      let raw;
+
+      try {
+        raw = JSON.parse(event.data);       // { move: "e4" }
+      } catch (_) {
+        raw = event.data;                   // "e4"
+      }
+
+      console.log("WS → Coup reçu :", raw);
+
+      // extraction du coup sous forme string
+      const move = typeof raw === "string" ? raw : raw.move;
+
+      const result = game.move(move);
+      if (result) {
+        console.log("Coup appliqué :", move);
+        setPosition(game.fen());
+        setMessages((prev) => [...prev, `Coup reçu : ${move}`]);
+      } else {
+        console.warn("Coup invalide :", move);
+      }
+    };
+
+    return () => ws.close();
+  }, [game]);
 
   return (
     <div style={{ textAlign: "center", marginTop: 20 }}>
-      <h2>♟️ Test ChessGame (sans WebSocket)</h2>
+      <h2>♟️ Test ChessGame (WebSocket)</h2>
+
       <Chessboard id="test-board" position={position} boardWidth={400} />
-      <div style={{ marginTop: 15 }}>
-        <button onClick={playNextMove}>Jouer le prochain coup</button>
-        <button onClick={resetGame} style={{ marginLeft: 10 }}>
-          🔁 Réinitialiser
-        </button>
-      </div>
+
+      <div data-testid="fen">{position}</div>
+
+      <ul data-testid="ws-messages">
+        {messages.map((msg, index) => (
+          <li key={index}>{msg}</li>
+        ))}
+      </ul>
     </div>
   );
 };

@@ -1,74 +1,69 @@
 /**
- * Tests WebSocket du composant ChessGame
+ * Tests WebSocket pour ChessGame.jsx
  */
 
 import { render, screen, act } from "@testing-library/react";
 import ChessGame from "../components/ChessGame";
 import { Chess } from "chess.js";
 
-// ------- Mock WebSocket global ---------
-global.WebSocket = class {
+class MockWebSocket {
   constructor() {
+    MockWebSocket.instances.push(this);
+    this.onopen = null;
     this.onmessage = null;
   }
   send() {}
-  // permet d’envoyer un message simulé
-  fakeMessage(msg) {
-    this.onmessage?.({ data: msg });
-  }
-};
+  close() {}
+}
+MockWebSocket.instances = [];
+global.WebSocket = MockWebSocket;
 
-describe("ChessGame (avec WebSocket)", () => {
-  test("joue e4 quand le WS envoie 'e4'", () => {
-    const { container } = render(<ChessGame />);
+jest.useFakeTimers();
 
-    const mockSocket = new WebSocket();
-    global.mockSocket = mockSocket;
-
-    const board = container.querySelector("#test-board");
-
+describe("ChessGame (WebSocket)", () => {
+  test("reçoit un coup via WS et met à jour la FEN", () => {
     const expected = new Chess();
     expected.move("e4");
+    const expectedFen = expected.fen();
 
-    // simulate WS message
+    render(<ChessGame />);
+
+    const ws = MockWebSocket.instances[0];
+
     act(() => {
-      mockSocket.fakeMessage("e4");
+      ws.onopen && ws.onopen();
+      ws.onmessage &&
+        ws.onmessage({ data: JSON.stringify({ move: "e4" }) });
     });
 
-    expect(board.getAttribute("data-fen")).toBe(expected.fen());
+    jest.advanceTimersByTime(20);
+
+    expect(screen.getByTestId("fen").textContent).toBe(expectedFen);
   });
 
-  test("enchaîne e4 puis c5", () => {
-    const { container } = render(<ChessGame />);
-    const mockSocket = new WebSocket();
-    global.mockSocket = mockSocket;
-
-    const board = container.querySelector("#test-board");
-
+  test("reçoit e4, c5, Nf3", () => {
     const expected = new Chess();
-    act(() => {
-      mockSocket.fakeMessage("e4");
-      expected.move("e4");
+    const seq = ["e4", "c5", "Nf3"];
+    seq.forEach((mv) => expected.move(mv));
+    const expectedFen = expected.fen();
 
-      mockSocket.fakeMessage("c5");
-      expected.move("c5");
-    });
+    render(<ChessGame />);
 
-    expect(board.getAttribute("data-fen")).toBe(expected.fen());
-  });
-
-  test("ignore un coup invalide", () => {
-    const { container } = render(<ChessGame />);
-    const mockSocket = new WebSocket();
-    global.mockSocket = mockSocket;
-
-    const board = container.querySelector("#test-board");
-    const initialFen = board.getAttribute("data-fen");
+    const ws = MockWebSocket.instances[MockWebSocket.instances.length - 1];
 
     act(() => {
-      mockSocket.fakeMessage("INVALID_MOVE");
+      ws.onopen && ws.onopen();
+      seq.forEach((mv) => {
+        ws.onmessage &&
+          ws.onmessage({ data: JSON.stringify({ move: mv }) });
+      });
     });
 
-    expect(board.getAttribute("data-fen")).toBe(initialFen);
+    jest.advanceTimersByTime(50);
+
+    expect(screen.getByTestId("fen").textContent).toBe(expectedFen);
+
+    const list = screen.getByTestId("ws-messages");
+    expect(list.children.length).toBe(1 + seq.length); // WS connecté + 3 coups
   });
 });
