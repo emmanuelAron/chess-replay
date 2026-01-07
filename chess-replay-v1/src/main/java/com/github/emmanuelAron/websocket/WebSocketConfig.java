@@ -12,6 +12,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     private final ChessWebSocketHandler handler;
 
     public WebSocketConfig(ChessWebSocketHandler handler) {
+        System.out.println("WebSocketConfig loaded");
         this.handler = handler;
     }
 
