@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 
@@ -7,8 +7,14 @@ const ChessGame = () => {
   const [position, setPosition] = useState(game.fen());
   const [messages, setMessages] = useState([]);
 
+  const wsRef = useRef(null); // clé de stabilité
+
   useEffect(() => {
+    if (wsRef.current) return; // empêche reconnexion
+
+    console.log("Tentative de connexion WebSocket…");
     const ws = new WebSocket("ws://localhost:8080/chess");
+    wsRef.current = ws;
 
     ws.onopen = () => {
       console.log("WebSocket connecté");
@@ -17,42 +23,49 @@ const ChessGame = () => {
 
     ws.onmessage = (event) => {
       let raw;
-
       try {
-        raw = JSON.parse(event.data);       // { move: "e4" }
-      } catch (_) {
-        raw = event.data;                   // "e4"
+        raw = JSON.parse(event.data);
+      } catch {
+        raw = event.data;
       }
 
-      console.log("WS → Coup reçu :", raw);
-
-      // extraction du coup sous forme string
       const move = typeof raw === "string" ? raw : raw.move;
 
-      const result = game.move(move);
-      if (result) {
-        console.log("Coup appliqué :", move);
-        setPosition(game.fen());
-        setMessages((prev) => [...prev, `Coup reçu : ${move}`]);
-      } else {
-        console.warn("Coup invalide :", move);
-      }
+     // try {
+        //const result = game.move(move);
+        const result = game.move(move, { sloppy: true });
+        if (result) {
+          setPosition(game.fen());
+          setMessages((prev) => [...prev, `Coup reçu : ${move}`]);
+        }else{
+            console.warn("Coup non appliqué (sloppy):", move);
+            }
+     // } catch (e) {
+     //   console.warn("Coup ignoré :", move);
+     // }
     };
 
-    return () => ws.close();
-  }, [game]);
+    ws.onerror = () => {
+      console.warn("Erreur WebSocket");
+    };
+
+    ws.onclose = () => {
+      console.warn("WebSocket fermé");
+      wsRef.current = null;
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []); // ✅ dépendances VIDES
 
   return (
     <div style={{ textAlign: "center", marginTop: 20 }}>
       <h2>♟️ Test ChessGame (WebSocket)</h2>
-
-      <Chessboard id="test-board" position={position} boardWidth={400} />
-
-      <div data-testid="fen">{position}</div>
-
-      <ul data-testid="ws-messages">
-        {messages.map((msg, index) => (
-          <li key={index}>{msg}</li>
+      <Chessboard position={position} boardWidth={400} />
+      <ul>
+        {messages.map((m, i) => (
+          <li key={i}>{m}</li>
         ))}
       </ul>
     </div>
