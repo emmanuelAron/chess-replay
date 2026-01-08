@@ -57,7 +57,7 @@ const ChessGame = () => {
     return () => {
       ws.close();
     };
-  }, []); // ✅ dépendances VIDES
+  }, []); // dépendances VIDES
 
   return (
     <div style={{ textAlign: "center", marginTop: 20 }}>
