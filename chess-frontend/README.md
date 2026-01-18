@@ -105,7 +105,7 @@ Configuration
 
 WebSocket URL is configured via environment variable:
 ```env
-REACT_APP_WS_URL=ws://localhost:8080/chess
+REACT_APP_WS_URL=ws://localhost:8080/replayEspagnole
 ```
 An example file is provided:
 .env.example
