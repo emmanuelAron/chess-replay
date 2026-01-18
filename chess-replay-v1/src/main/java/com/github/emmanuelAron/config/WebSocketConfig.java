@@ -1,5 +1,6 @@
-package com.github.emmanuelAron.websocket;
+package com.github.emmanuelAron.config;
 
+import com.github.emmanuelAron.websocket.ChessWebSocketHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;

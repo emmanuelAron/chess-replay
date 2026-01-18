@@ -4,12 +4,14 @@ import com.github.emmanuelAron.websocket.ChessWebSocketHandler;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
 
+@Profile("local")
 @Component
 public class PgnConsumerWebSocket implements CommandLineRunner {
 

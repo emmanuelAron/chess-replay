@@ -6,11 +6,13 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.context.annotation.Profile;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
+
 
 public class ChessMovesProducerLive {
 

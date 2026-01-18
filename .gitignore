@@ -1,15 +1,47 @@
-# React frontend
-chess-frontend/node_modules/
+############################
+# React / Node
+############################
 node_modules/
+chess-frontend/node_modules/
+npm-debug.log*
+yarn-error.log*
 
-# Logs
-*.log
-
-# Build
+############################
+# Build frontend
+############################
 dist/
 build/
 
-# Java / Maven / IntelliJ
+############################
+# Java / Maven / Spring
+############################
 target/
+*.class
+*.jar
+*.war
+*.ear
+
+############################
+# IDE
+############################
 .idea/
 *.iml
+.vscode/
+
+############################
+# Environment variables
+############################
+.env
+.env.*
+!*.env.example
+
+############################
+# OS
+############################
+.DS_Store
+Thumbs.db
+
+############################
+# Docker
+############################
+*.pid

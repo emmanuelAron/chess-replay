@@ -9,11 +9,16 @@ const ChessGame = () => {
 
   const wsRef = useRef(null); // clé de stabilité
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (wsRef.current) return; // empêche reconnexion
+    console.log("WS_URL =", process.env.REACT_APP_WS_URL);
 
-    console.log("Tentative de connexion WebSocket…");
-    const ws = new WebSocket("ws://localhost:8080/chess");
+    const WS_URL = process.env.REACT_APP_WS_URL;
+    console.log("Tentative de connexion WebSocket…", WS_URL);
+    //const ws = new WebSocket("ws://localhost:8080/chess");//local mode
+    const ws = new WebSocket(WS_URL); //production mode
+
     wsRef.current = ws;
 
     ws.onopen = () => {
@@ -22,6 +27,7 @@ const ChessGame = () => {
     };
 
     ws.onmessage = (event) => {
+        console.log("WS message received:", event.data);
       let raw;
       try {
         raw = JSON.parse(event.data);
