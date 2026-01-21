@@ -124,3 +124,23 @@ Kafka was already implemented in another branch, but temporarily removed here to
 - prepare clean reintroduction via profiles
 
 - Kafka can be re-enabled cleanly later without touching WebSocket logic.
+
+
+---
+
+## Demo – Ruy Lopez (Chigorin Variation)
+
+### Initial position (Chigorin setup)
+
+[![Ruy Lopez – Chigorin initial position](img/chigorin1.png)](img/chigorin1.png)
+
+👉 Click the image to view it in full size.
+
+---
+
+### Replay in progress (WebSocket live moves)
+
+[![Ruy Lopez – Chigorin replay](img/chigorin2.png)](img/chigorin2.png)
+
+👉 This screenshot shows the board updating in real time as moves are broadcast
+via WebSocket and applied on the React frontend.
