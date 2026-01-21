@@ -1,16 +1,24 @@
 package com.github.emmanuelAron.controller;
 
+import com.github.emmanuelAron.service.OpeningService;
 import com.github.emmanuelAron.websocket.ChessWebSocketHandler;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class WebSocketTestController {
 
     private final ChessWebSocketHandler handler;
+    private final OpeningService openingService;
 
-    public WebSocketTestController(ChessWebSocketHandler handler) {
+    public WebSocketTestController(ChessWebSocketHandler handler,  OpeningService openingService) {
         this.handler = handler;
+        this.openingService = openingService;
     }
 
     @GetMapping("/test/chess")
@@ -48,4 +56,23 @@ public class WebSocketTestController {
 
         return "Replay Espagnole started";
     }
+
+    @GetMapping("/replay/espagnole/{variationId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public String replayEspagnole(@PathVariable("variationId") String variationId) {
+
+        new Thread(() -> {
+            try {
+                List<String> moves = openingService.getEspagnoleVariationMoves(variationId);
+                for (String move : moves) {
+                    handler.broadcast(move);
+                    Thread.sleep(2000);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+        return "Replay Espagnole " + variationId + " started";
+    }
+
 }

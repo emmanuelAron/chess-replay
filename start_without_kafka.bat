@@ -1,4 +1,9 @@
 @echo off
+echo Arret des processus sur les ports 3000 et 8080...
+
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr :3000') do taskkill /PID %%a /F >nul 2>&1
+for /f "tokens=5" %%a in ('netstat -aon ^| findstr :8080') do taskkill /PID %%a /F >nul 2>&1
+
 echo Démarrage du backend (Spring Boot)...
 start cmd /k "cd /d D:\eclipse_wkspace\chess-replay-parent\chess-replay-v1 && mvn spring-boot:run -Dspring-boot.run.profiles=default"
 

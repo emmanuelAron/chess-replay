@@ -11,3 +11,89 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  margin: 16px 0;
+}
+
+.layout {
+  display: flex;
+  gap: 24px;
+  padding: 16px;
+}
+
+/* Menu à gauche */
+.sidebar {
+  min-width: 160px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  cursor: pointer;
+  margin: 8px 0;
+}
+
+/* Échiquier centré */
+.board {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/*  Supprimer puces */
+.moves-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+/* Variantes */
+.sidebar li {
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.sidebar li:hover {
+  font-weight: bold;
+}
+/* titles */
+h1, h2 {
+  margin: 0;
+  font-weight: 600;
+}
+/*           MoveList.jsx begin        */
+.moves {
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.move-row {
+  display: grid;
+  grid-template-columns: 30px 60px 60px;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.move-number {
+  color: #555;
+}
+
+.move.white {
+  text-align: left;
+}
+
+.move.black {
+  text-align: left;
+}
+/*           MoveList.jsx end        */
+
