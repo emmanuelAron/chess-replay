@@ -1,0 +1,39 @@
+{
+  "opening": "Ruy Lopez",
+  "eco": "C60–C99",
+  "variations": [
+    {
+      "id": "CHIGORIN",
+      "name": "Chigorin Variation",
+      "moves": [
+        "e4", "e5", "Nf3", "Nc6", "Bb5", "a6",
+        "Ba4", "Nf6", "O-O", "Be7", "Re1", "b5",
+        "Bb3", "d6", "c3", "O-O", "h3", "Na5"
+      ]
+    },
+    {
+      "id": "BREYER",
+      "name": "Breyer Variation",
+      "moves": [
+        "e4", "e5", "Nf3", "Nc6", "Bb5", "a6",
+        "Ba4", "Nf6", "O-O", "Be7", "Re1", "b5",
+        "Bb3", "d6", "c3", "O-O", "h3", "Nb8"
+      ]
+    },
+    {
+      "id": "ARKHANGELSK",
+      "name": "Arkhangelsk Variation",
+      "moves": [
+        "e4", "e5", "Nf3", "Nc6", "Bb5", "a6",
+        "Ba4", "Nf6", "O-O", "b5", "Bb3", "Bb7"
+      ]
+    },
+    {
+      "id": "BERLIN",
+      "name": "Berlin Defense",
+      "moves": [
+        "e4", "e5", "Nf3", "Nc6", "Bb5", "Nf6"
+      ]
+    }
+  ]
+}
