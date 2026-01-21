@@ -28,7 +28,11 @@ public class ChessWebSocketHandler extends TextWebSocketHandler {
         System.out.println("📡 Broadcasting to WebSocket: " + message);
         for (WebSocketSession session : sessions) {
             try {
+                if (session.isOpen()) {
                 session.sendMessage(new TextMessage(message));
+                }else {
+                    System.out.println("WS CLOSED (skip send): " + session.getId());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

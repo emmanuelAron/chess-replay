@@ -20,6 +20,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(handler, "/chess")
-                .setAllowedOrigins("*"); // autoriser React localhost:3000
+                .setAllowedOriginPatterns("*"); // autoriser React localhost:3000
+
     }
 }

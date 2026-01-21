@@ -3,4 +3,8 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
 
+server:
+  port: 8080
+
+
 

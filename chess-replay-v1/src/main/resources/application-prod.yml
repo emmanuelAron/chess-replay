@@ -1,5 +1,0 @@
-spring:
-  kafka:
-    bootstrap-servers: ""
-    consumer:
-      auto-startup: false
