@@ -1,49 +1,126 @@
-Bonjour,
+# Chess Replay – the git branch : WebSocket (No Kafka)
 
-Voici un projet qui m'intéresse beaucoup car autour des échecs.  (une véritable passion)  
-Il permet de rejouer des parties d'echecs coups par coups , un peu comme dans un film!  (temps réel)  
-C'est un projet en cours de développement et ce que vous voyez à ce jour n'est que le début du projet ...   
-Il fait intervenir différentes technos en informatique, je cherchais initialement un projet autour du traitement de données avec spark...    
-Partant d'un fichier pgn (format propre aux échecs), il y a du retraitement de données avec python, spark...  
-J'ai fait le choix technique de transformer ces données en jsonl car le pgn pur m'a confronté à trop de problemes dans le nettoyage, validation des données...  
-Premier test sur un fichier de 66 000 parties, je transforme ce pgn en jsonl (utilisé dans le monde big data).
-Ce jsonl est transmis à kafka via un producer et un consumer et on voit les coups défiler coté backend sur la console toutes les X secondes...(fait)  
-Ensuite je souhaiterai utiliser react-chessboard pour faire apparaitre un échiquier visuel sous forme web qui fera défiler les parties à une vitesse V (chaque coups).
+This branch demonstrates a **real-time chess replay system using WebSocket only**,  
+without Kafka, as a **stabilized baseline** of the project.
 
-Ensuite j'aimerai qu'à coté de chaque échiquier s'affiche des statistiques générées avec spark (pandas?) , par exemple le taux de victoire de chaque joueur de la partie en cours, ses ouvertures les plus jouées...A voir...    
-Spark sera préféré à pandas car ce sera un contexte big data.  
-Ensuite, j'aimerai plusieurs echiquiers qui défilent à cette vitesse...Chaque échiquier serait un Consumer kafka d'une même source (pouvant etre tres grande) de données.    
-Enfin j'aimerai envoyer ces données sur plusieurs partitions spark (traitement distribué) , et réfléchir aux problématiques de performance et de traitement de données massives.
+It was created after an initial WebSocket + Kafka implementation, in order to:
+- validate the WebSocket flow independently
+- simplify debugging during Docker / Fly.io deployment
+- introduce clean Spring profiles before re-enabling Kafka
 
-Vous trouverez ci dessous un lien vidéo présentant une petite démo en anglais (faite en vitesse), sur ce début du projet.
+---
 
-Technos:
+## 🎯 Purpose of this branch
 
-Java 17  
-Spring boot avec socket  
-Kafka   
-Maven,Docker   
-Python, Spark   
-React (pas encore implémenté)
+The goal of `chess-replay-websocket-nokafka` is to provide:
 
-Vidéo de démo:  
-https://drive.google.com/file/d/1IDeHXMiDUqB8Z41WPCO_oQpaZH_oeZn2/view?usp=sharing
+- a **fully working WebSocket replay**
+- a **Kafka-free default execution**
+- a **clear separation of concerns** using Spring profiles
+- a reliable base for future evolutions (Kafka, streaming, deployment)
 
-Depuis le répertoire /chess-replay-parent :  
-Lancer Docker
+Kafka is intentionally **disabled by default** in this branch.
 
-```bash  
-docker-compose up -d  
-```
-Lancer spring-boot:
-```code   
-cd chess-replay-v1
+---
+
+## 🏗️ Architecture (current state)
+
+### Backend (Spring Boot)
+
+- WebSocket endpoint exposed at:  
+  ws://localhost:8080/chess
+
+- Messages are **simple chess moves** (e.g. `e2e4`)
+- Broadcast handled by a custom `ChessWebSocketHandler`
+- REST endpoints used to trigger replays
+
+### Frontend (React)
+
+- Connects to the WebSocket server
+- Receives moves in real time
+- Applies them using `chess.js`
+- Updates the board dynamically
+
+---
+
+## 🔁 Replay mechanism
+
+A REST endpoint allows triggering a **progressive replay**:
+
+GET /replay
+
+Example sequence:
+
+e2e4
+(2s delay)
+e7e5
+(2s delay)
+g1f3
+...
+
+
+Each move is broadcast via WebSocket and applied on the frontend.
+
+This simulates a real-time game replay without Kafka.
+
+---
+
+## ⚙️ Spring Profiles
+
+| Profile   | Description |
+|----------|-------------|
+| `default` | WebSocket only (Kafka disabled) |
+| `local`   | WebSocket + Kafka (future / other branch) |
+| `prod`    | WebSocket, Kafka disabled or external |
+
+This branch focuses on the **`default` profile**.
+
+---
+
+## 🚀 How to run (no Kafka)
+
+### Backend
+
+```bash
 mvn spring-boot:run
 ```
 
-moves_replay.png
-![moves_replay.png](img/moves_replay.png)
-![debug des coups reçus frontend](img/debug.png)
+or on Windows:
 
+```bat
+start_without_kafka.bat
+```
 
+Frontend
+```bash
+cd chess-frontend
+npm install
+npm start
+```
 
+Then open:
+http://localhost:3000
+
+Configuration
+
+WebSocket URL is configured via environment variable:
+```env
+REACT_APP_WS_URL=ws://localhost:8080/replayEspagnole
+```
+An example file is provided:
+.env.example
+
+Why Kafka is not used here
+
+<br>
+Kafka was already implemented in another branch, but temporarily removed here to:
+
+- isolate WebSocket behavior
+
+- reduce infrastructure complexity
+
+- avoid coupling WebSocket debugging with Kafka/Docker issues
+
+- prepare clean reintroduction via profiles
+
+- Kafka can be re-enabled cleanly later without touching WebSocket logic.
