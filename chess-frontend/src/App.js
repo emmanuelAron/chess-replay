@@ -32,7 +32,7 @@ const handleVariantSelect = () => {
 
   return (
     <div className="app">
-      <h1 className="title">Partie en direct</h1>
+      <h1 className="title">Game Replay with Opening Insights</h1>
 
       <div className="layout">
         <VariantsMenu />

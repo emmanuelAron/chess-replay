@@ -20,8 +20,27 @@ code {
 }
 
 .title {
-  margin: 16px 0;
+  font-family: "Georgia", serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #2b1a10;
+
+    margin: 0 0 28px 0;
+    text-align: center;
+
+    letter-spacing: 0.02em;
 }
+/* slight visual separation for title  */
+.title::after {
+  content: "";
+  display: block;
+  width: 120px;
+  height: 2px;
+  margin: 14px auto 0;
+  background: rgba(122, 74, 46, 0.6);
+  border-radius: 2px;
+}
+
 
 .layout {
   display: flex;
@@ -129,4 +148,124 @@ h1, h2 {
   max-height: 480px;
   overflow-y: auto;
   font-family: "Georgia", serif;
+}
+/* Menu   */
+.menu-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  padding: 12px 12px 12px 14px;
+  background: rgba(248, 245, 239, 0.65); /* papier chaleureux */
+  border-left: 3px solid #7a4a2e;       /* liseré bois */
+  border-radius: 6px;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+.menu-section:hover {
+  background: rgba(248, 245, 239, 0.85);
+}
+
+/* ================================================= */
+/* ================= RESPONSIVE ==================== */
+/* ================================================= */
+
+/* Tablet and small screens */
+@media (max-width: 900px) {
+
+  /* Main layout switches to column */
+  .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* === Sidebar becomes horizontal === */
+  .side-menu {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    width: 100%;
+    max-width: none;
+    justify-content: center;
+  }
+
+  /* Menu sections aligned side by side */
+  .menu-section {
+    flex: 1;
+    padding: 10px;
+    border-left: none;
+    border-bottom: 3px solid #7a4a2e;
+    border-radius: 6px 6px 4px 4px;
+  }
+
+  /* Center menu section titles */
+  .menu-title {
+    text-align: center;
+    font-size: 0.85rem;
+  }
+
+  /* Compact menu buttons */
+  .menu-item {
+    font-size: 0.9rem;
+    padding: 6px 8px;
+    text-align: center;
+  }
+
+  /* Game area stacks vertically */
+  .game-area {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Moves list placed below the board */
+  .moves-panel {
+    border-left: none;
+    border-top: 6px solid #7a4a2e;
+    max-width: 420px;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 600px) {
+
+  /* Reduce title size */
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .title::after {
+    width: 80px;
+  }
+
+  /* Reduce board frame padding */
+  .board-frame {
+    padding: 12px;
+  }
+
+  /* Smaller font for moves list */
+  .moves-panel {
+    font-size: 13px;
+  }
+}
+/* Extra compact mobile adjustments */
+@media (max-width: 500px) {
+
+  .side-menu {
+    padding: 4px 6px;
+  }
+
+  .menu-section {
+    padding: 4px 6px;
+    gap: 4px;
+  }
+
+  .menu-title {
+    font-size: 0.7rem;
+  }
+
+  .menu-item {
+    padding: 3px 5px;
+    font-size: 0.8rem;
+  }
 }
