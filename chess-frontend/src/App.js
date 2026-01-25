@@ -13,19 +13,55 @@ const handleVariantSelect = () => {
     setResetKey((k) => k + 1);
   };
 
+//  return (
+//    <div className="app">
+//      <h1 className="title">Partie en direct</h1>
+//
+//      <div className="layout">
+//        <VariantsMenu />
+//        <main className="board">
+//          <ChessGame onMove={(move) => setMoves((prev) => [...prev, move])} />
+//          <MovesList moves={moves} />
+//        </main>
+//      </div>
+//    </div>
+//  );
+
+
+
+
   return (
     <div className="app">
       <h1 className="title">Partie en direct</h1>
 
       <div className="layout">
         <VariantsMenu />
-        <main className="board">
-          <ChessGame onMove={(move) => setMoves((prev) => [...prev, move])} />
-          <MovesList moves={moves} />
+
+        <main className="game-area">
+
+          {/* wooden style */}
+          <div className="board-frame">
+            <div className="board-inner">
+              <ChessGame
+                onMove={(move) => setMoves((prev) => [...prev, move])}
+              />
+            </div>
+          </div>
+
+          {/* move list */}
+          <div className="moves-panel">
+            <MovesList moves={moves} />
+          </div>
+
         </main>
       </div>
     </div>
   );
+
+
+
+
+
 }
 
 export default App;
