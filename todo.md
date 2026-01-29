@@ -69,3 +69,10 @@
 - [ ] Architecture diagram (Kafka / Spark / WebSocket)
 - [ ] Prepare a reproducible demo
 
+
+
+
+
+
+
+

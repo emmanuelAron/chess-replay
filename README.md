@@ -144,3 +144,21 @@ Kafka was already implemented in another branch, but temporarily removed here to
 
 👉 This screenshot shows the board updating in real time as moves are broadcast
 via WebSocket and applied on the React frontend.
+
+## Deployment
+
+### Backend
+- Fly.io
+- Java 21 / Spring Boot
+- WebSocket + REST
+- URL: https://chess-replay-v1.fly.dev
+
+### Frontend
+- Vercel
+- React (CRA)
+- URL: https://chess-frontend-alpha.vercel.app
+
+### Environment variables
+REACT_APP_API_BASE=https://chess-replay-v1.fly.dev  
+REACT_APP_WS_URL=wss://chess-replay-v1.fly.dev/chess
+

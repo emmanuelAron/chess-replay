@@ -1,13 +1,12 @@
 package com.github.emmanuelAron.service;
 
-import com.github.emmanuelAron.events.EventPublisher;
-import com.github.emmanuelAron.events.MovePlayedEvent;
-import com.github.emmanuelAron.events.ReplayMode;
-import com.github.emmanuelAron.events.ReplaySpeed;
+import com.github.emmanuelAron.events.*;
 import com.github.emmanuelAron.service.ReplayEngine;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 // service/ReplayEngineImpl.java
 @Service
@@ -27,17 +26,14 @@ public class ReplayEngineImpl implements ReplayEngine {
         // 1. Load all moves for the game
         List<MovePlayedEvent> moves = gameLoader.loadGame(gameId);
 
-        // 2. Replay moves sequentially
-        for (MovePlayedEvent move : moves) {
-            eventPublisher.publish(move);
+        MovePlayedEvent testEvent = new MovePlayedEvent(
+                "MOVE_PLAYED",
+                UUID.randomUUID().toString(),
+                Instant.now(),
+                new GameInfo(gameId, "Garry KASPAROV", "Anatoly KARPOV", "World Championship", "10/02/1981"),
+                new MoveInfo(1, "e4")
+        );
 
-            // 3. Control replay speed
-            try {
-                Thread.sleep(speed.getDelayMillis());
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
-        }
+        eventPublisher.publish(testEvent);
     }
 }

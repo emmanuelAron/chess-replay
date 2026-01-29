@@ -6,4 +6,5 @@ public record GameInfo(
         String blackPlayer,
         String event,
         String date
-) {}
+) {
+}
