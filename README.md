@@ -1,3 +1,88 @@
+# Chess Replay – Event-Driven Chess Visualization
+
+This repository contains multiple branches exploring different architectures:
+
+- `chess-replay-websocket-nokafka`
+  → Stable WebSocket baseline
+
+- `chess-replay-kafka-event-driven`
+  → Event-driven replay using Kafka + WebSocket
+
+- (future) analytics / Spark branches
+
+
+## 🔄 Kafka Consumers
+
+In the event-driven architecture, Kafka is used to decouple producers and consumers
+and to support multiple independent processing pipelines from the same game events.
+
+The `chess.events` topic is consumed by **three distinct consumers**, each with a
+different responsibility.
+
+### 1️⃣ ReplayKafkaConsumer (Replay / UI)  (In progress)
+
+**Purpose:**  
+Drive the chess replay in real time.
+
+**Role:**
+- Consumes `MOVE_PLAYED` events from Kafka
+- Forwards each move to connected frontend clients via WebSocket
+- Acts as the bridge between Kafka and the UI
+
+**Why it exists:**
+- Keeps the frontend unaware of Kafka
+- Allows replay speed, pause, and orchestration logic to live in the backend
+- Makes replay deterministic and reproducible
+
+---
+
+### 2️⃣ AnalyticsKafkaConsumer (Statistics / Insights)  (To Do)
+
+**Purpose:**  
+Compute analytics from historical chess data.
+
+**Role:**
+- Consumes the same `MOVE_PLAYED` events
+- Aggregates data such as:
+  - opening frequencies
+  - move distributions
+  - game lengths
+- Prepares data for storage (e.g. MongoDB, future Spark pipelines)
+
+**Why it exists:**
+- Analytics must not impact replay latency
+- Allows analytics to evolve independently (batch, streaming, Spark, etc.)
+- Demonstrates Kafka fan-out capabilities
+
+---
+
+### 3️⃣ (Optional / Future) PersistenceKafkaConsumer  (To do)
+
+**Purpose:**  
+Persist game events for long-term storage or replay.
+
+**Role:**
+- Stores raw events in a database or event store
+- Enables full game reconstruction from Kafka history
+- Can serve as a foundation for audit, replays, or ML datasets
+
+
+---
+
+### 🎯 Key Design Principle
+
+All consumers read from the **same Kafka topic**, but belong to **different consumer groups**.
+
+This ensures:
+- Each consumer receives **all events**
+- No coupling between replay, analytics, and persistence
+- Easy addition of new consumers without touching existing code
+
+
+
+
+
+
 # Chess Replay – the git branch : WebSocket (No Kafka)
 
 This branch demonstrates a **real-time chess replay system using WebSocket only**,  

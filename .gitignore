@@ -32,7 +32,8 @@ target/
 # Environment variables
 ############################
 .env
-.env.*
+.env.production
+.env.local
 !*.env.example
 
 ############################
@@ -45,3 +46,10 @@ Thumbs.db
 # Docker
 ############################
 *.pid
+
+# Kafka
+kafka/
+**/kafka/**/logs/
+*.log
+
+

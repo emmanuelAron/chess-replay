@@ -26,6 +26,7 @@ const ChessGame = ({ onMove, resetKey }) => {
     };
 
     ws.onmessage = (event) => {
+        console.log("WS message received:", event.data);
       const move = event.data;
 
       const result = gameRef.current.move(move, { sloppy: true });
