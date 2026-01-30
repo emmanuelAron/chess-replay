@@ -13,23 +13,6 @@ const handleVariantSelect = () => {
     setResetKey((k) => k + 1);
   };
 
-//  return (
-//    <div className="app">
-//      <h1 className="title">Partie en direct</h1>
-//
-//      <div className="layout">
-//        <VariantsMenu />
-//        <main className="board">
-//          <ChessGame onMove={(move) => setMoves((prev) => [...prev, move])} />
-//          <MovesList moves={moves} />
-//        </main>
-//      </div>
-//    </div>
-//  );
-
-
-
-
   return (
     <div className="app">
       <h1 className="title">Game Replay with Opening Insights</h1>

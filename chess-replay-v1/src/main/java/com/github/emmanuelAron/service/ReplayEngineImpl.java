@@ -26,14 +26,14 @@ public class ReplayEngineImpl implements ReplayEngine {
         // 1. Load all moves for the game
         List<MovePlayedEvent> moves = gameLoader.loadGame(gameId);
 
-        MovePlayedEvent testEvent = new MovePlayedEvent(
-                "MOVE_PLAYED",
-                UUID.randomUUID().toString(),
-                Instant.now(),
-                new GameInfo(gameId, "Garry KASPAROV", "Anatoly KARPOV", "World Championship", "10/02/1981"),
-                new MoveInfo(1, "e4")
-        );
+        for (MovePlayedEvent event : moves) {
+            eventPublisher.publish(event);
 
-        eventPublisher.publish(testEvent);
+            try {
+                Thread.sleep(speed.getDelayMillis());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 }

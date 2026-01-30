@@ -9,7 +9,7 @@ package com.github.emmanuelAron.events;
  *
  * Typical implementations:
  * - WebSocketEventPublisher (real-time UI updates)
- * - KafkaEventPublisher (event-driven / analytics pipeline)
+ * - KafkaMovePlayedProducer (event-driven / analytics pipeline)
  *
  * This interface is a key building block of the event-oriented architecture.
  */
