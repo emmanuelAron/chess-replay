@@ -1,17 +1,19 @@
 package com.github.emmanuelAron.kafka;
 
 import com.github.emmanuelAron.events.MovePlayedEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("kafka")
 public class MovePlayedConsumer {
 
-    private final SimpMessagingTemplate messagingTemplate;
+    private final ApplicationEventPublisher publisher;
 
-    public MovePlayedConsumer(SimpMessagingTemplate messagingTemplate) {
-        this.messagingTemplate = messagingTemplate;
+    public MovePlayedConsumer(ApplicationEventPublisher publisher) {
+        this.publisher = publisher;
     }
 
     @KafkaListener(
@@ -19,11 +21,9 @@ public class MovePlayedConsumer {
             groupId = "chess-replay-group"
     )
     public void onMovePlayed(MovePlayedEvent event) {
-        System.out.println("♻️ Kafka event received: " + event);
+        System.out.println("Kafka event received: " + event);
 
-        messagingTemplate.convertAndSend(
-                "/topic/game",
-                event
-        );
+        // Publish internal Spring event
+        publisher.publishEvent(event);
     }
 }
