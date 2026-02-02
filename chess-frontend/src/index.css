@@ -40,7 +40,14 @@ code {
   background: rgba(122, 74, 46, 0.6);
   border-radius: 2px;
 }
-
+/*  Created by */
+.subtitle {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #7a6a5e;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
 
 .layout {
   display: flex;
@@ -268,4 +275,51 @@ h1, h2 {
     padding: 3px 5px;
     font-size: 0.8rem;
   }
+}
+/*  Variants List  */
+.variant-card {
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.variant-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.variant-moves {
+  font-family: monospace;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.variant-button {
+  padding: 6px 12px;
+}
+/* MovesList.jsx  */
+.moves.compact {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.moves.compact .move-row {
+  margin-bottom: 2px;
+}
+/* Sub-menu for the variations */
+.opening-panel {
+  background-color: #faf7f2;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  width: 260px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.panel-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #d6c8b8;
+  padding-bottom: 0.4rem;
 }

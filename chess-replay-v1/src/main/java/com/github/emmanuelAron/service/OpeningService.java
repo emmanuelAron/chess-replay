@@ -17,9 +17,15 @@ public class OpeningService {
         this.objectMapper = objectMapper;
     }
 
-    public List<String> getEspagnoleVariationMoves(String variationId) {
+    public List<String> getEspagnoleVariationMoves(String openingId, String variationId) {
 
-        Opening opening = loadRuyLopez();
+        Opening opening;
+
+        if ("ruy_lopez".equalsIgnoreCase(openingId)) {
+            opening = loadRuyLopez();
+        } else {
+            throw new IllegalArgumentException("Unknown opening: " + openingId);
+        }
 
         return opening.variations().stream()
                 .filter(v -> v.id().equalsIgnoreCase(variationId))
@@ -28,6 +34,7 @@ public class OpeningService {
                         new IllegalArgumentException("Unknown variation: " + variationId))
                 .moves();
     }
+
 
     private Opening loadRuyLopez() {
         try (InputStream is = getClass()

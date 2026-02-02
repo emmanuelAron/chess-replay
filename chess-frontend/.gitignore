@@ -1,0 +1,79 @@
+####################################
+# OS / Editor
+####################################
+.DS_Store
+Thumbs.db
+
+####################################
+# IntelliJ / IDEs
+####################################
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.vscode/
+
+####################################
+# Java / Maven / Spring Boot
+####################################
+target/
+*.log
+*.class
+
+####################################
+# Kafka (LOCAL ONLY — NEVER COMMIT)
+####################################
+kafka-logs/
+logs/
+__cluster_metadata-*
+__consumer_offsets-*
+meta.properties
+
+# Kafka local installs (WSL / Windows paths)
+**/kafka*/logs/
+**/kafka*/data/
+**/kafka*/tmp/
+
+####################################
+# Docker
+####################################
+docker-data/
+docker-volume/
+docker-compose.override.yml
+
+####################################
+# React / Frontend
+####################################
+node_modules/
+build/
+dist/
+
+####################################
+# Environment variables
+####################################
+.env
+.env.local
+.env.development
+.env.test
+.env.production.local
+
+####################################
+# Vercel
+####################################
+.vercel/
+
+####################################
+# NPM
+####################################
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+####################################
+# WSL / Linux
+####################################
+*.swp
+*.swo
+*~
+

@@ -1,6 +1,46 @@
-[
-  { "id": "RUY_LOPEZ", "name": "Ruy Lopez" },
-  { "id": "ITALIAN_GAME", "name": "Italian Game" },
-  { "id": "SICILIAN_DEFENSE", "name": "Sicilian Defense" },
-  { "id": "FRENCH_DEFENSE", "name": "French Defense" }
-]
+{
+  "open_games": {
+    "label": "Open Games",
+    "openings": [
+      {
+        "id": "italian_game",
+        "label": "Italian Game",
+        "eco": ["C50", "C54"],
+        "file": "italian_game.json"
+      },
+      {
+        "id": "ruy_lopez",
+        "label": "Spanish Game (Ruy Lopez)",
+        "eco": ["C60", "C99"],
+        "file": "ruy_lopez.json"
+      }
+    ]
+  },
+
+  "semi_open_games": {
+    "label": "Semi-Open Games",
+    "openings": [
+      {
+        "id": "sicilian_defense",
+        "label": "Sicilian Defense",
+        "eco": ["B20", "B99"],
+        "file": "sicilian_defense.json"
+      }
+    ]
+  },
+
+  "closed_games": {
+    "label": "Closed Games",
+    "openings": []
+  },
+
+  "indian_games": {
+    "label": "Indian Defenses",
+    "openings": []
+  },
+
+  "other_games": {
+    "label": "Other Openings",
+    "openings": []
+  }
+}

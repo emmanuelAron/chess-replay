@@ -32,10 +32,11 @@ sleep 6
 echo "🟣 Starting React frontend..."
 cd "$ROOT_DIR/chess-frontend"
 
-npm start &
+nohup npx react-scripts start > frontend.log 2>&1 &
 FRONTEND_PID=$!
 
 echo "Frontend PID: $FRONTEND_PID"
+
 
 echo ""
 echo "✅ Stack started successfully"

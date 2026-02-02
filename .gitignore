@@ -51,5 +51,21 @@ Thumbs.db
 kafka/
 **/kafka/**/logs/
 *.log
+**/kafka*/
+**/kafka*/logs/
+**/*.log
+
+# --- Frontend ---
+build/
+.vercel/
+
+# --- Kafka (Windows + WSL safe) ---
+**\\kafka*
+**\\kafka*\\logs*
+
+# --- Misc ---
+Help
+*.log
+
 
 
