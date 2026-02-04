@@ -1,0 +1,37 @@
+{
+  "id": "other_openings",
+  "label": "Other Openings",
+  "eco": "A00–A39",
+  "variations": [
+    {
+      "id": "LARSEN_OPENING",
+      "name": "Larsen Opening (1.b3)",
+      "moves": [
+        "b3"
+      ]
+    },
+    {
+      "id": "BIRD_OPENING",
+      "name": "Bird Opening (1.f4)",
+      "moves": [
+        "f4"
+      ]
+    },
+    {
+      "id": "TROMPOWSKY_ATTACK",
+      "name": "Trompowsky Attack",
+      "moves": [
+        "d4", "Nf6",
+        "Bg5"
+      ]
+    },
+    {
+      "id": "RETI_OPENING",
+      "name": "Réti Opening",
+      "moves": [
+        "Nf3", "d5",
+        "c4"
+      ]
+    }
+  ]
+}

@@ -25,6 +25,30 @@
         "label": "Sicilian Defense",
         "eco": ["B20", "B99"],
         "file": "sicilian_defense.json"
+      },
+      {
+        "id": "caro_kann_defense",
+        "label": "Caro-Kann Defense",
+        "eco": ["B10", "B19"],
+        "file": "caro_kann_defense.json"
+      },
+      {
+        "id": "french_defense",
+        "label": "French Defense",
+        "eco": ["C00", "C19"],
+        "file": "french_defense.json"
+      },
+      {
+        "id": "pirc_defense",
+        "label": "Pirc Defense",
+        "eco": ["B07", "B09"],
+        "file": "pirc_defense.json"
+      },
+      {
+        "id": "alekhine_defense",
+        "label": "Alekhine Defense",
+        "eco": ["B02", "B05"],
+        "file": "alekhine_defense.json"
       }
     ]
   },
@@ -36,11 +60,35 @@
 
   "indian_games": {
     "label": "Indian Defenses",
-    "openings": []
+    "openings": [{
+      "id": "kings_indian_defense",
+      "label": "King's Indian Defense",
+      "eco": ["E60", "E99"],
+      "file": "kings_indian_defense.json"
+    },
+      {
+        "id": "queens_indian_defense",
+        "label": "Queen's Indian Defense",
+        "eco": ["E12", "E19"],
+        "file": "queens_indian_defense.json"
+      }]
   },
 
   "other_games": {
     "label": "Other Openings",
-    "openings": []
+    "openings": [
+      {
+        "id": "dutch_defense",
+        "label": "Dutch Defense",
+        "eco": ["A80", "A99"],
+        "file": "dutch_defense.json"
+      },
+      {
+        "id": "other_openings",
+        "label": "Other Openings",
+        "eco": ["A00", "A39"],
+        "file": "other_openings.json"
+      }
+    ]
   }
 }

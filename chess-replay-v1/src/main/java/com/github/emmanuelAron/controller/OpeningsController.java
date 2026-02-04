@@ -38,8 +38,7 @@ public class OpeningsController {
     @GetMapping(value = "/index", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getOpeningsIndex() throws IOException {
         // Load the index JSON file from the classpath
-        ClassPathResource resource =
-                new ClassPathResource("openings/openings_index.json");
+        ClassPathResource resource = new ClassPathResource("openings/openings_index.json");
         // Read the entire file content as a UTF-8 string
         String json = StreamUtils.copyToString(
                 resource.getInputStream(),
@@ -61,8 +60,7 @@ public class OpeningsController {
     public ResponseEntity<String> getOpeningFile(
             @PathVariable("file") String file) throws IOException {
         // Build a classpath reference to the requested opening file
-        ClassPathResource resource =
-                new ClassPathResource("openings/" + file);
+        ClassPathResource resource = new ClassPathResource("openings/" + file);
 
         if (!resource.exists()) {
             return ResponseEntity.notFound().build();

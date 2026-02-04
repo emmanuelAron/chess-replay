@@ -1,0 +1,50 @@
+{
+  "id": "queens_indian_defense",
+  "label": "Queen's Indian Defense",
+  "eco": "E12–E19",
+  "variations": [
+    {
+      "id": "QID_MAIN",
+      "name": "Queen's Indian – Main Line (g3)",
+      "moves": [
+        "d4", "Nf6", "c4", "e6",
+        "Nf3", "b6", "g3", "Bb7",
+        "Bg2", "Be7", "O-O", "O-O"
+      ]
+    },
+    {
+      "id": "QID_PETROSIAN",
+      "name": "Queen's Indian – Petrosian System (a3)",
+      "moves": [
+        "d4", "Nf6", "c4", "e6",
+        "Nf3", "b6", "a3"
+      ]
+    },
+    {
+      "id": "QID_MILES",
+      "name": "Queen's Indian – Miles Variation",
+      "moves": [
+        "d4", "Nf6", "c4", "e6",
+        "Nf3", "b6", "Bg5"
+      ]
+    },
+    {
+      "id": "QID_KASPAROV",
+      "name": "Queen's Indian – Kasparov Variation",
+      "moves": [
+        "d4", "Nf6", "c4", "e6",
+        "Nf3", "b6", "Nc3", "Bb7",
+        "Bg5"
+      ]
+    },
+    {
+      "id": "QID_FIANCHETTO_DELAYED",
+      "name": "Queen's Indian – Delayed Fianchetto",
+      "moves": [
+        "d4", "Nf6", "c4", "e6",
+        "Nf3", "b6", "e3", "Bb7",
+        "Bd3"
+      ]
+    }
+  ]
+}

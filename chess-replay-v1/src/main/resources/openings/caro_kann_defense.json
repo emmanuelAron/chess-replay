@@ -1,0 +1,26 @@
+{
+  "id": "caro_kann_defense",
+  "label": "Caro-Kann Defense",
+  "eco": "B10–B19",
+  "variations": [
+    {
+      "id": "CARO_MAIN",
+      "name": "Classical Variation",
+      "moves": [
+        "e4", "c6",
+        "d4", "d5",
+        "Nc3", "dxe4",
+        "Nxe4", "Bf5"
+      ]
+    },
+    {
+      "id": "CARO_ADVANCE",
+      "name": "Advance Variation",
+      "moves": [
+        "e4", "c6",
+        "d4", "d5",
+        "e5", "Bf5"
+      ]
+    }
+  ]
+}

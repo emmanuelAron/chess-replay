@@ -1,0 +1,39 @@
+{
+  "id": "dutch_defense",
+  "label": "Dutch Defense",
+  "eco": "A80–A99",
+  "variations": [
+    {
+      "id": "DUTCH_STONEWALL",
+      "name": "Stonewall Variation",
+      "moves": [
+        "d4", "f5",
+        "c4", "e6",
+        "Nc3", "d5",
+        "Nf3", "c6",
+        "e3", "Bd6"
+      ]
+    },
+    {
+      "id": "DUTCH_LENINGRAD",
+      "name": "Leningrad Variation",
+      "moves": [
+        "d4", "f5",
+        "c4", "g6",
+        "Nc3", "Bg7",
+        "Nf3", "d6",
+        "g3", "Nf6"
+      ]
+    },
+    {
+      "id": "DUTCH_CLASSICAL",
+      "name": "Classical Dutch",
+      "moves": [
+        "d4", "f5",
+        "c4", "Nf6",
+        "Nc3", "e6",
+        "Nf3", "Be7"
+      ]
+    }
+  ]
+}

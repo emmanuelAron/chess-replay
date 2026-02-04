@@ -1,0 +1,28 @@
+{
+  "id": "alekhine_defense",
+  "label": "Alekhine Defense",
+  "eco": "B02–B05",
+  "variations": [
+    {
+      "id": "ALEKHINE_MAIN",
+      "name": "Main Line (Chase Variation)",
+      "moves": [
+        "e4", "Nf6",
+        "e5", "Nd5",
+        "d4", "d6",
+        "c4", "Nb6"
+      ]
+    },
+    {
+      "id": "ALEKHINE_EXCHANGE",
+      "name": "Exchange Variation",
+      "moves": [
+        "e4", "Nf6",
+        "e5", "Nd5",
+        "d4", "d6",
+        "c4", "Nb6",
+        "exd6"
+      ]
+    }
+  ]
+}

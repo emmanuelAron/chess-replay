@@ -1,0 +1,72 @@
+{
+  "id": "kings_indian_defense",
+  "label": "King's Indian Defense",
+  "eco": "E60–E99",
+  "variations": [
+    {
+      "id": "KID_CLASSICAL_E5",
+      "name": "Classical System (…e5)",
+      "moves": [
+        "d4", "Nf6", "c4", "g6",
+        "Nc3", "Bg7", "e4", "d6",
+        "Nf3", "O-O", "Be2", "e5",
+        "O-O", "Nc6"
+      ]
+    },
+    {
+      "id": "KID_PETROSIAN",
+      "name": "Petrosian System (h3)",
+      "moves": [
+        "d4", "Nf6", "c4", "g6",
+        "Nc3", "Bg7", "e4", "d6",
+        "Nf3", "O-O", "Be2", "e5",
+        "O-O", "h3"
+      ]
+    },
+    {
+      "id": "KID_AVERBAKH",
+      "name": "Averbakh System (Bg5)",
+      "moves": [
+        "d4", "Nf6", "c4", "g6",
+        "Nc3", "Bg7", "e4", "d6",
+        "Be2", "O-O", "Bg5"
+      ]
+    },
+    {
+      "id": "KID_SAMISCH",
+      "name": "Sämisch System (f3)",
+      "moves": [
+        "d4", "Nf6", "c4", "g6",
+        "Nc3", "Bg7", "e4", "d6",
+        "f3"
+      ]
+    },
+    {
+      "id": "KID_FOUR_PAWNS",
+      "name": "Four Pawns Attack",
+      "moves": [
+        "d4", "Nf6", "c4", "g6",
+        "Nc3", "Bg7", "e4", "d6",
+        "f4"
+      ]
+    },
+    {
+      "id": "KID_FIANCHETTO",
+      "name": "Fianchetto System (g3)",
+      "moves": [
+        "d4", "Nf6", "c4", "g6",
+        "g3", "Bg7", "Bg2", "O-O",
+        "Nf3", "d6"
+      ]
+    },
+    {
+      "id": "KID_MAKOGONOV",
+      "name": "Makogonov System (h3)",
+      "moves": [
+        "d4", "Nf6", "c4", "g6",
+        "Nc3", "Bg7", "e4", "d6",
+        "h3"
+      ]
+    }
+  ]
+}
