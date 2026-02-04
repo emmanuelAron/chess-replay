@@ -1,42 +1,56 @@
 # Chess Replay – Event-Driven Chess Visualization
 
-This repository contains multiple branches exploring different architectures:
+This project is a **web-based chess replay application** designed as a **real-world example of an event-driven architecture**.
 
-- `chess-replay-websocket-nokafka`
-  → Stable WebSocket baseline
+A chess game is modeled as a **stream of domain events** (`MOVE_PLAYED`), enabling multiple independent processing pipelines such as real-time replay, analytics, and future data processing.
 
-- `chess-replay-kafka-event-driven`
-  → Event-driven replay using Kafka + WebSocket
+🌐 **Live demo**  
+Frontend: https://chess-replay-eta.vercel.app  
+Backend: https://chess-replay-v1.fly.dev
 
-- (future) analytics / Spark branches
+---
 
+## Core Architecture
 
-## 🔄 Kafka Consumers
+### Event-Driven Design
+- Chess moves are published as events to **Kafka**
+- Events are immutable and represent the **single source of truth**
+- Multiple consumers can process the same events independently (**fan-out**)
 
-In the event-driven architecture, Kafka is used to decouple producers and consumers
-and to support multiple independent processing pipelines from the same game events.
+Responsibilities are clearly separated:
+- Replay (UI / real-time)
+- Analytics (statistics, insights)
+- Persistence (future)
 
-The `chess.events` topic is consumed by **three distinct consumers**, each with a
-different responsibility.
+---
 
-### 1️⃣ ReplayKafkaConsumer (Replay / UI)  (In progress)
+## Kafka Consumers (Fan-out Pattern)
+
+All consumers subscribe to the **same Kafka topic** (`chess.events`) but belong to **different consumer groups**.
+
+This guarantees that:
+- each consumer receives **all events**
+- consumers are fully **decoupled**
+- new pipelines can be added without modifying existing code
+
+### 1) ReplayKafkaConsumer (UI / Real-time)
 
 **Purpose:**  
 Drive the chess replay in real time.
 
 **Role:**
-- Consumes `MOVE_PLAYED` events from Kafka
-- Forwards each move to connected frontend clients via WebSocket
+- Consumes `MOVE_PLAYED` events
+- Streams moves to the frontend via **WebSocket**
 - Acts as the bridge between Kafka and the UI
 
-**Why it exists:**
-- Keeps the frontend unaware of Kafka
-- Allows replay speed, pause, and orchestration logic to live in the backend
-- Makes replay deterministic and reproducible
+**Why it matters:**
+- The frontend is completely unaware of Kafka
+- Replay latency is isolated from other workloads
+- Replay logic lives entirely in the backend
 
 ---
 
-### 2️⃣ AnalyticsKafkaConsumer (Statistics / Insights)  (To Do)
+### 2) AnalyticsKafkaConsumer (Statistics / Data) *(in progress)*
 
 **Purpose:**  
 Compute analytics from historical chess data.
@@ -47,203 +61,104 @@ Compute analytics from historical chess data.
   - opening frequencies
   - move distributions
   - game lengths
-- Prepares data for storage (e.g. MongoDB, future Spark pipelines)
+- Designed to evolve toward batch / streaming pipelines (e.g. Spark)
 
 **Why it exists:**
 - Analytics must not impact replay latency
-- Allows analytics to evolve independently (batch, streaming, Spark, etc.)
-- Demonstrates Kafka fan-out capabilities
+- Demonstrates Kafka fan-out and data-oriented design
 
 ---
 
-### 3️⃣ (Optional / Future) PersistenceKafkaConsumer  (To do)
+### 3) PersistenceKafkaConsumer *(future)*
 
 **Purpose:**  
-Persist game events for long-term storage or replay.
+Persist events for long-term storage and replay.
 
 **Role:**
-- Stores raw events in a database or event store
-- Enables full game reconstruction from Kafka history
-- Can serve as a foundation for audit, replays, or ML datasets
-
-
----
-
-### 🎯 Key Design Principle
-
-All consumers read from the **same Kafka topic**, but belong to **different consumer groups**.
-
-This ensures:
-- Each consumer receives **all events**
-- No coupling between replay, analytics, and persistence
-- Easy addition of new consumers without touching existing code
-
-
-
-
-
-
-# Chess Replay – the git branch : WebSocket (No Kafka)
-
-This branch demonstrates a **real-time chess replay system using WebSocket only**,  
-without Kafka, as a **stabilized baseline** of the project.
-
-It was created after an initial WebSocket + Kafka implementation, in order to:
-- validate the WebSocket flow independently
-- simplify debugging during Docker / Fly.io deployment
-- introduce clean Spring profiles before re-enabling Kafka
+- Store raw events in a database or event store
+- Enable full game reconstruction
+- Serve as a base for ML datasets or audit logs
 
 ---
 
-## 🎯 Purpose of this branch
+## Frontend
 
-The goal of `chess-replay-websocket-nokafka` is to provide:
-
-- a **fully working WebSocket replay**
-- a **Kafka-free default execution**
-- a **clear separation of concerns** using Spring profiles
-- a reliable base for future evolutions (Kafka, streaming, deployment)
-
-Kafka is intentionally **disabled by default** in this branch.
+- Built with **React**
+- Connects only via **WebSocket**
+- Applies moves using `chess.js`
+- Completely **decoupled from Kafka and backend internals**
 
 ---
 
-## 🏗️ Architecture (current state)
+## Tech Stack
 
-### Backend (Spring Boot)
-
-- WebSocket endpoint exposed at:  
-  ws://localhost:8080/chess
-
-- Messages are **simple chess moves** (e.g. `e2e4`)
-- Broadcast handled by a custom `ChessWebSocketHandler`
-- REST endpoints used to trigger replays
-
-### Frontend (React)
-
-- Connects to the WebSocket server
-- Receives moves in real time
-- Applies them using `chess.js`
-- Updates the board dynamically
+- **Backend:** Java 21, Spring Boot, Kafka, WebSocket
+- **Frontend:** React, chess.js
+- **Infrastructure:** Docker, Fly.io (backend), Vercel (frontend)
 
 ---
 
-## 🔁 Replay mechanism
+## Project Structure & Branches
 
-A REST endpoint allows triggering a **progressive replay**:
+This repository explores multiple architectural approaches:
 
-GET /replay
+- `chess-replay-websocket-nokafka`  
+  → Stable WebSocket-only baseline (no Kafka)
 
-Example sequence:
+- `chess-replay-kafka-event-driven`  
+  → Event-driven architecture with Kafka + WebSocket
 
-e2e4
-(2s delay)
-e7e5
-(2s delay)
-g1f3
-...
-
-
-Each move is broadcast via WebSocket and applied on the frontend.
-
-This simulates a real-time game replay without Kafka.
+Future branches may explore analytics, Spark, or persistence pipelines.
 
 ---
 
-## ⚙️ Spring Profiles
-
-| Profile   | Description |
-|----------|-------------|
-| `default` | WebSocket only (Kafka disabled) |
-| `local`   | WebSocket + Kafka (future / other branch) |
-| `prod`    | WebSocket, Kafka disabled or external |
-
-This branch focuses on the **`default` profile**.
-
----
-
-## 🚀 How to run (no Kafka)
+## Running locally (WebSocket only)
 
 ### Backend
-
 ```bash
 mvn spring-boot:run
 ```
 
-or on Windows:
-
-```bat
-start_without_kafka.bat
-```
-
-Frontend
+### Frontend
 ```bash
 cd chess-frontend
 npm install
 npm start
 ```
 
-Then open:
+Then open:  
 http://localhost:3000
 
-Configuration
+---
 
-WebSocket URL is configured via environment variable:
-```env
-REACT_APP_WS_URL=ws://localhost:8080/replayEspagnole
-```
-An example file is provided:
-.env.example
+## Why this project
 
-Why Kafka is not used here
-
-<br>
-Kafka was already implemented in another branch, but temporarily removed here to:
-
-- isolate WebSocket behavior
-
-- reduce infrastructure complexity
-
-- avoid coupling WebSocket debugging with Kafka/Docker issues
-
-- prepare clean reintroduction via profiles
-
-- Kafka can be re-enabled cleanly later without touching WebSocket logic.
-
+This project was built to:
+- explore **event-driven backend design**
+- apply **Kafka fan-out patterns** in a concrete use case
+- connect **real-time systems and data processing**
+- go beyond CRUD-style applications
 
 ---
 
-## Demo – Ruy Lopez (Chigorin Variation)
+## Next steps
 
-### Initial position (Chigorin setup)
-
-[![Ruy Lopez – Chigorin initial position](img/chigorin1.png)](img/chigorin1.png)
-
-👉 Click the image to view it in full size.
+- Finalize `AnalyticsKafkaConsumer`
+- Add basic analytics endpoints
+- Introduce persistence / event storage
+- Explore batch or streaming pipelines (Spark)
 
 ---
 
-### Replay in progress (WebSocket live moves)
+## Author
 
-[![Ruy Lopez – Chigorin replay](img/chigorin2.png)](img/chigorin2.png)
+Developed as a personal project to showcase backend architecture, event-driven systems, and data-oriented design.
 
-👉 This screenshot shows the board updating in real time as moves are broadcast
-via WebSocket and applied on the React frontend.
+## Example – King's Indian Defense
 
-## Deployment
+![King's Indian Defense – Sample Replay](img/kings_indian.png)
 
-### Backend
-- Fly.io
-- Java 21 / Spring Boot
-- WebSocket + REST
-- URL: https://chess-replay-v1.fly.dev
+This screenshot shows a live replay of a King's Indian Defense variation,
+with moves streamed via WebSocket and applied in real time on the frontend.
 
-### Frontend
-- Vercel
-- React (CRA)
-- URL: https://chess-frontend-alpha.vercel.app
-
-### Environment variables
-REACT_APP_API_BASE=https://chess-replay-v1.fly.dev  
-REACT_APP_WS_URL=wss://chess-replay-v1.fly.dev/chess
 
