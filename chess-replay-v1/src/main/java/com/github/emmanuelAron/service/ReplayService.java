@@ -1,8 +1,6 @@
 package com.github.emmanuelAron.service;
 
-import com.github.emmanuelAron.events.ReplaySpeed;
-import com.github.emmanuelAron.model.Opening;
-import com.github.emmanuelAron.model.Variation;
+
 import com.github.emmanuelAron.websocket.ChessWebSocketHandler;
 import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Replays a chess variation by broadcasting structured MOVE events
+ * to connected WebSocket clients at a fixed interval.
+ *
+ * Each move is wrapped in a JSON message containing a "type" field
+ * to support frontend event differentiation (MOVE vs STAT).
+ */
 @Service
 public class ReplayService {
 
@@ -27,23 +33,6 @@ public class ReplayService {
         this.openingService = openingService;
     }
 
-//    public synchronized void replayEspagnole(String openingId, String variationId) {
-//        if (currentReplayTask != null && !currentReplayTask.isDone()) {
-//            currentReplayTask.cancel(true);
-//        }
-//        List<String> moves =
-//                openingService.getEspagnoleVariationMoves(openingId, variationId);
-//
-//        Iterator<String> iterator = moves.iterator();
-//
-//        currentReplayTask = scheduler.scheduleAtFixedRate(() -> {
-//            if (!iterator.hasNext()) {
-//                currentReplayTask.cancel(false);
-//                return;
-//            }
-//            handler.broadcast(iterator.next());
-//        }, 0, 1200, TimeUnit.MILLISECONDS);
-//    }
     /**
      * Generic replay entry point.
      *
@@ -60,10 +49,11 @@ public class ReplayService {
         }
 
         // Load moves from JSON (data-driven)
-        List<String> moves =
-                openingService.getVariationMoves(openingId, variationId);
-
+        List<String> moves = openingService.getVariationMoves(openingId, variationId);
         Iterator<String> iterator = moves.iterator();
+
+        // Track move index
+        AtomicInteger moveIndex = new AtomicInteger(0);
 
         // Schedule replay
         currentReplayTask = scheduler.scheduleAtFixedRate(() -> {
@@ -71,7 +61,40 @@ public class ReplayService {
                 currentReplayTask.cancel(false);
                 return;
             }
-            handler.broadcast(iterator.next());
+            // Send each move as structured JSON instead of raw SAN string.
+            // The frontend now expects a JSON payload with a "type" field
+            // to differentiate between MOVE and STAT messages.
+            String san = iterator.next();
+            int index = moveIndex.getAndIncrement();
+
+            // Build structured MOVE message
+            String moveMessage = """
+                {
+                    "type": "MOVE",
+                    "move": {
+                        "san": "%s"
+                    }
+                }
+               """.formatted(san);
+            // Broadcast JSON message to all connected WebSocket clients
+            handler.broadcast(moveMessage);
+
+            // ===============================
+            // STAT message (only first move)
+            // ===============================
+            if (index == 0) {
+
+                String statMessage = """
+                {
+                    "type": "STAT",
+                    "pauseMs": 3000,
+                    "message": "This opening starts with %s"
+                }
+               """.formatted(san);
+
+                handler.broadcast(statMessage);
+            }
+
         }, 0, 1200, TimeUnit.MILLISECONDS);
     }
 

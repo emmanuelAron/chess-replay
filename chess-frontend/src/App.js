@@ -6,11 +6,11 @@ import SideMenu from "./components/SideMenu";
 
 
 function App() {
-// Global navigation state: selected opening category
-  const [selectedCategory, setSelectedCategory] = useState("open_games");
+  const [selectedCategory, setSelectedCategory] = useState("open_games");// selected opening category
   const [moves, setMoves] = useState([]);
   const [replayKey, setReplayKey] = useState(0);
   const [isWsReady, setIsWsReady] = useState(false);//Websocket state for managing concurrency problems
+  const [statMessage, setStatMessage] = useState(null);//MOVE or STAT differenciation
 
 
   // RESET LOGIC
@@ -47,9 +47,16 @@ function App() {
                 resetKey={replayKey}
                 onWsReady={setIsWsReady}
                 onMove={(move) => setMoves((prev) => [...prev, move])}
+                onStat={setStatMessage}
               />
             </div>
           </div>
+            {/* statistics */}
+          {statMessage && (
+            <div className="stat-box">
+              {statMessage}
+            </div>
+          )}
 
           {/* move list */}
           <div className="moves-panel">

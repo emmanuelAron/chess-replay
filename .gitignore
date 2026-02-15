@@ -67,5 +67,10 @@ build/
 Help
 *.log
 
-
+# Experiments / local folders
+KTable_demo/
+chess-replay-v1/Configuring/
+chess-replay-v1/User/
+chess-replay-v1/naming/
+chess-replay-v1/resolving/
 

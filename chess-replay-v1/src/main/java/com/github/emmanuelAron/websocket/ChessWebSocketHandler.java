@@ -15,17 +15,17 @@ public class ChessWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         sessions.add(session);
-        System.out.println("🟢 WebSocket connected: " + session.getId());
+        System.out.println("WebSocket connected: " + session.getId());
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) {
         sessions.remove(session);
-        System.out.println("🔴 WebSocket closed: " + session.getId());
+        System.out.println("WebSocket closed: " + session.getId());
     }
 
     public void broadcast(String message) {
-        System.out.println("📡 Broadcasting to WebSocket: " + message);
+        System.out.println("Broadcasting to WebSocket: " + message);
         for (WebSocketSession session : sessions) {
             try {
                 if (session.isOpen()) {

@@ -323,3 +323,19 @@ h1, h2 {
   border-bottom: 1px solid #d6c8b8;
   padding-bottom: 0.4rem;
 }
+/* statistics panel */
+.stat-box {
+  margin: 15px 0;
+  padding: 12px;
+  background-color: #1e1e1e;
+  color: #f5f5f5;
+  border-left: 4px solid #c9a227;
+  font-style: italic;
+  border-radius: 6px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+/* statistics panel also */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
