@@ -25,11 +25,21 @@ export default function OpeningsAccordion({
       {/* Opening header */}
       <div
         className="cursor-pointer font-semibold flex items-center gap-2"
-        onClick={onToggle}
+        onClick={() => {
+          console.log("clicked", opening.label);
+          onToggle();
+        }}
       >
         <span>{isOpen ? "▾" : "▸"}</span>
         <span>{opening.label}</span>
       </div>
+
+      {/* Loading */}
+      {isOpen && variations === null && (
+        <div className="ml-6 mt-2 text-sm text-gray-400">
+          Loading...
+        </div>
+      )}
 
       {/* Variations */}
       {isOpen && variations && variations.length > 0 && (

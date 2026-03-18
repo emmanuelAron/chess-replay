@@ -96,8 +96,8 @@ export default function OpeningsScreen({ selectedCategory, onReplayStart }) {
               setSelectedOpeningId(isOpen ? null : opening.id)
             }
             variations={
-              isOpen && openingData
-                ? openingData.variations
+              isOpen
+                ? (openingData ? openingData.variations : null)
                 : []
             }
             onSelectVariation={(variationId) =>{
