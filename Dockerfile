@@ -10,7 +10,7 @@ COPY . .
 # Build only the backend module, while also building the parent
 # -pl : build selected module
 # -am : also build required modules (the parent)
-RUN mvn -DskipTests package
+RUN mvn -pl chess-replay-v1 -am -DskipTests package
 
 
 # ---- RUN STAGE ----

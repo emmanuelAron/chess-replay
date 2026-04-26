@@ -1,0 +1,21 @@
+# Node
+node_modules
+chess-frontend/node_modules
+
+# Build
+target
+**/target
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+
+# Logs
+*.log
+
+# OS
+.DS_Store
