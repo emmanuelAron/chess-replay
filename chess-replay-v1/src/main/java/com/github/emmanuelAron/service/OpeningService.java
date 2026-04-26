@@ -2,7 +2,6 @@ package com.github.emmanuelAron.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.emmanuelAron.model.Opening;
-import com.github.emmanuelAron.model.Variation;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

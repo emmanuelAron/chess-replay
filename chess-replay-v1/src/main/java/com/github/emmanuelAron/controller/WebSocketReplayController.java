@@ -1,9 +1,6 @@
 package com.github.emmanuelAron.controller;
 
-import com.github.emmanuelAron.service.OpeningService;
 import com.github.emmanuelAron.service.ReplayService;
-import com.github.emmanuelAron.websocket.ChessWebSocketHandler;
-import jakarta.annotation.PreDestroy;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +14,11 @@ public class WebSocketReplayController {
         this.replayService = replayService;
     }
 
-//    @GetMapping("/replay/espagnole/{openingId}/{variationId}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void replayEspagnole(@PathVariable("openingId") String openingId, @PathVariable("variationId") String variationId) {
-//        replayService.replayEspagnole(openingId, variationId);
-//    }
-
+    /**
+     * Triggers a replay of a chess opening variation.
+     * This endpoint initiates the backend event pipeline (Kafka + WebSocket)
+     * to stream moves in real time to connected clients.
+     */
     @GetMapping("/{opening}/{openingId}/{variationId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void replay(@PathVariable("opening") String opening, @PathVariable("openingId") String openingId, @PathVariable("variationId") String variationId) {
